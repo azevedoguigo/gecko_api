@@ -7,6 +7,8 @@ defmodule GeckoApiWeb.Router do
 
   scope "/api", GeckoApiWeb do
     pipe_through :api
+
+    post "/users", UsersController, :create
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
