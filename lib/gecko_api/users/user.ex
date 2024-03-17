@@ -23,7 +23,7 @@ defmodule GeckoApi.Users.User do
     %__MODULE__{}
     |> cast(params, @user_params)
     |> validate_required(@user_params)
-    |> validate_length(:name, min: 2, max: 60)
+    |> validate_length(:name, min: 2, max: 55)
     |> validate_format(:email, ~r/@/)
     |> validate_length(:email, min: 11, max: 40)
     |> validate_length(:password, min: 6, max: 30)
