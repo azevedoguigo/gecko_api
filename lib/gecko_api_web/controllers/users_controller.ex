@@ -3,6 +3,8 @@ defmodule GeckoApiWeb.UsersController do
 
   alias GeckoApi.Users
 
+  action_fallback GeckoApiWeb.FallbackController
+
   def create(conn, params) do
     with {:ok, user} <- Users.create_user(params) do
       conn
