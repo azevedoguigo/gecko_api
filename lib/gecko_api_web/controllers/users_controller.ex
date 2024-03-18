@@ -12,4 +12,12 @@ defmodule GeckoApiWeb.UsersController do
       |> render(:create, user: user)
     end
   end
+
+  def get(conn, %{"id" => user_id}) do
+    with {:ok, user} <- Users.get_user(user_id) do
+      conn
+      |> put_status(:ok)
+      |> render(:get, user: user)
+    end
+  end
 end
