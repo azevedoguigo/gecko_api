@@ -9,6 +9,8 @@ defmodule GeckoApiWeb.UsersJSON do
     }
   end
 
+  def get(%{user: user}), do: %{status: 200, data: data(user)}
+
   defp data(%User{} = user) do
     %{
       name: user.name,

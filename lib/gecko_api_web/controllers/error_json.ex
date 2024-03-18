@@ -13,6 +13,20 @@ defmodule GeckoApiWeb.ErrorJSON do
     %{errors: %{detail: Phoenix.Controller.status_message_from_template(template)}}
   end
 
+  def error(%{error_data: %{status_code: :not_found} = error_data}) do
+    %{
+      status: 404,
+      message: error_data.message
+    }
+  end
+
+  def error(%{error_data: %{status_code: :bad_request} = error_data}) do
+    %{
+      status: 400,
+      message: error_data.message
+    }
+  end
+
   def error(%{changeset: %Ecto.Changeset{} = changeset}) do
     %{errors: Ecto.Changeset.traverse_errors(changeset, &translate_errors/1)}
   end
