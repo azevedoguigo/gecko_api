@@ -10,6 +10,8 @@ defmodule GeckoApiWeb.Router do
 
     post "/users", UsersController, :create
     get "/users", UsersController, :get
+
+    post "/auth", AuthController, :login
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
