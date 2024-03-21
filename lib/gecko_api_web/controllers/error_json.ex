@@ -27,6 +27,13 @@ defmodule GeckoApiWeb.ErrorJSON do
     }
   end
 
+  def error(%{error_data: %{status_code: :unauthorized} = error_data}) do
+    %{
+      status: 401,
+      message: error_data.message
+    }
+  end
+
   def error(%{changeset: %Ecto.Changeset{} = changeset}) do
     %{errors: Ecto.Changeset.traverse_errors(changeset, &translate_errors/1)}
   end

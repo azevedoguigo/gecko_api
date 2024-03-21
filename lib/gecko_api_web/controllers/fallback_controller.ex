@@ -17,6 +17,13 @@ defmodule GeckoApiWeb.FallbackController do
     |> render(:error, error_data: error_data)
   end
 
+  def call(conn, {:error, %{status_code: :unauthorized} = error_data}) do
+    conn
+    |> put_status(:unauthorized)
+    |> put_view(json: GeckoApiWeb.ErrorJSON)
+    |> render(:error, error_data: error_data)
+  end
+
   def call(conn, {:error, %Changeset{} = changeset}) do
     conn
     |> put_status(:bad_request)
