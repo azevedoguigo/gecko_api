@@ -39,6 +39,15 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# Guardian configuration.
+config :gecko_api, GeckoApiWeb.Auth.Guardian,
+  issuer: "gecko_api",
+  secret_key: System.get_env("AUTH_SECRET_KEY")
+
+config :gecko_api, GeckoApiWeb.Auth.Pipeline,
+  module: GeckoApiWeb.Auth.Guardian,
+  error_handler: GeckoApiWeb.Auth.AuthErrorHandler
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
