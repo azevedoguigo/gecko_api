@@ -5,13 +5,22 @@ defmodule GeckoApiWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug GeckoApiWeb.Auth.Pipeline
+  end
+
   scope "/api", GeckoApiWeb do
     pipe_through :api
 
     post "/users", UsersController, :create
-    get "/users", UsersController, :get
 
     post "/login", AuthController, :login
+  end
+
+  scope "/api", GeckoApiWeb do
+    pipe_through [:api, :auth]
+
+    get "/users", UsersController, :get
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

@@ -2,6 +2,7 @@ defmodule GeckoApiWeb.UsersControllerTest do
   use GeckoApiWeb.ConnCase
 
   alias GeckoApi.Users
+  alias GeckoApiWeb.Auth.Guardian
 
   @user_default_params %{
     name: "Valentino Rossi",
@@ -9,17 +10,27 @@ defmodule GeckoApiWeb.UsersControllerTest do
     password: "supersenha"
   }
 
+  setup %{conn: conn} do
+    {:ok, user} = Users.create_user(@user_default_params)
+
+    {:ok, token, _claims} = Guardian.encode_and_sign(user)
+
+    conn = put_req_header(conn, "authorization", "Bearer #{token}")
+
+    {:ok, conn: conn, user: user}
+  end
+
   describe "create/2" do
     test "Creates a new user and returns it if the parameters are valid.", %{conn: conn} do
       response =
         conn
-        |> post(~p"/api/users", @user_default_params)
+        |> post(~p"/api/users", Map.put(@user_default_params, :email, "thedoctor@gmail.com"))
         |> json_response(:created)
 
       assert %{
         "data" => %{
+          "email" => "thedoctor@gmail.com",
           "name" => "Valentino Rossi",
-          "email" => "the.doctor@outlook.com"
         },
         "message" => "User created successfully!",
         "status" => 201
@@ -43,12 +54,10 @@ defmodule GeckoApiWeb.UsersControllerTest do
   end
 
   describe "get/2" do
-    test "Return the user if the id is valid and belongs to the user.", %{conn: conn} do
-      {:ok, created_user} = Users.create_user(@user_default_params)
-
+    test "Return the user if the id is valid and belongs to the user.", %{conn: conn, user: user} do
       response =
         conn
-        |> get(~p"/api/users?id=#{created_user.id}")
+        |> get(~p"/api/users?id=#{user.id}")
         |> json_response(:ok)
 
       assert %{
