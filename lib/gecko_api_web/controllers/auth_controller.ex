@@ -1,6 +1,6 @@
 defmodule GeckoApiWeb.AuthController do
   @moduledoc """
-
+  Provides a login action.
   """
   use GeckoApiWeb, :controller
 
