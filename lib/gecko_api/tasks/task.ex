@@ -24,7 +24,7 @@ defmodule GeckoApi.Tasks.Task do
     |> cast(params, [:title, :description, :user_id])
     |> validate_required([:title, :user_id])
     |> validate_length(:title, min: 2, max: 40)
-    |> validate_required(:description, min: 2, max: 500)
+    |> validate_length(:description, max: 500)
     |> cast_assoc(:user)
   end
 end
