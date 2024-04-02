@@ -2,10 +2,11 @@ defmodule GeckoApi.Users.User do
   @moduledoc """
   Provides the User schema and changeset functions.
   """
-  alias Ecto.Changeset
-
   use Ecto.Schema
   import Ecto.Changeset
+
+  alias Ecto.Changeset
+  alias GeckoApi.Tasks.Task
 
   @primary_key {:id, Ecto.UUID, autogenerate: true}
   @user_params [:name, :email, :password]
@@ -15,6 +16,7 @@ defmodule GeckoApi.Users.User do
     field :email, :string
     field :password, :string, virtual: true
     field :password_hash, :string
+    has_many :task, Task
 
     timestamps()
   end
