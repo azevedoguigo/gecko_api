@@ -21,6 +21,8 @@ defmodule GeckoApiWeb.Router do
     pipe_through [:api, :auth]
 
     get "/users", UsersController, :get
+
+    post "/tasks", TasksController, :create
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
