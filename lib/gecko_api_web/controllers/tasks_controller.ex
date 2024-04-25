@@ -24,4 +24,12 @@ defmodule GeckoApiWeb.TasksController do
       |> render(:create, task: task)
     end
   end
+
+  def show(conn, %{"id" => id}) do
+    with {:ok, task} <- Tasks.get_task(id) do
+      conn
+      |> put_status(:ok)
+      |> render(:show, task: task)
+    end
+  end
 end

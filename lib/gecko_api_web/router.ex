@@ -23,6 +23,7 @@ defmodule GeckoApiWeb.Router do
     get "/users", UsersController, :get
 
     post "/tasks", TasksController, :create
+    get "/tasks", TasksController, :show
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
