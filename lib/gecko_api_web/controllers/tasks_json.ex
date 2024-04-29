@@ -9,6 +9,8 @@ defmodule GeckoApiWeb.TasksJSON do
     }
   end
 
+  def show(%{task: task}), do: data(task)
+
   defp data(%Task{} = task) do
     %{
       id: task.id,
