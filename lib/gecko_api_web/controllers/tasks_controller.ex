@@ -32,4 +32,12 @@ defmodule GeckoApiWeb.TasksController do
       |> render(:show, task: task)
     end
   end
+
+  def delete(conn, %{"id" => id}) do
+    with {:ok, task} <- Tasks.delete_task(id) do
+      conn
+      |> put_status(:ok)
+      |> render(:delete, task: task)
+    end
+  end
 end
