@@ -58,7 +58,7 @@ defmodule GeckoApiWeb.TasksControllerTest do
     end
   end
 
-  describe "get/1" do
+  describe "get/2" do
     test "Returns the task data if the id is valid and belongs to a task.", %{conn: conn, user: user} do
       user_id = user.id
 
@@ -96,6 +96,53 @@ defmodule GeckoApiWeb.TasksControllerTest do
       response =
         conn
         |> get("/api/tasks/?id=#{Ecto.UUID.generate()}")
+        |> json_response(:not_found)
+
+      assert %{"message" => "Task does not exists!", "status" => 404} == response
+    end
+  end
+
+  describe "delete/2" do
+    test "Returns the task data and message if the id is valid and belongs to a task.", %{conn: conn, user: user} do
+      user_id = user.id
+
+      task_params = %{
+        title: "Create tests of of tasks feature.",
+        description: "The tests includes all modules and controllers.",
+        user_id: user_id
+      }
+
+      {:ok, task} = Tasks.create_task(task_params)
+
+      response =
+        conn
+        |> delete("/api/tasks/?id=#{task.id}")
+        |> json_response(:ok)
+
+      assert %{
+          "message" => "Task deleted!",
+          "task" => %{
+          "completed" => false,
+          "description" => "The tests includes all modules and controllers.",
+          "title" => "Create tests of of tasks feature.",
+          "user_id" => ^user_id
+        }
+        } = response
+    end
+
+    test "Returns an error message and a status code if the task id is invalid.", %{conn: conn} do
+      response =
+        conn
+        |> delete("/api/tasks/?id=invalid_id")
+        |> json_response(:bad_request)
+
+      assert %{"message" => "Invalid task ID!", "status" => 400} == response
+    end
+
+    test "Returns an error message and a status code if the id does not belong to any task", %{conn: conn} do
+      response =
+        conn
+        |> delete("/api/tasks/?id=#{Ecto.UUID.generate()}")
         |> json_response(:not_found)
 
       assert %{"message" => "Task does not exists!", "status" => 404} == response
