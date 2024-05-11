@@ -27,4 +27,11 @@ defmodule GeckoApi.Tasks.Task do
     |> validate_length(:description, max: 500)
     |> cast_assoc(:user)
   end
+
+  def changeset(task, params) do
+    task
+    |> cast(params, [:title, :description])
+    |> validate_length(:title, min: 2, max: 40)
+    |> validate_length(:description, max: 500)
+  end
 end
