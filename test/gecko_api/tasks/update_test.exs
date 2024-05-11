@@ -15,12 +15,12 @@ defmodule GeckoApi.Tasks.UpdateTest do
     {:ok, user} = Users.create_user(user_params)
 
     user_id = user.id
-      task_params = %{
-        title: "Create geck api unit tests.",
-        description: "Unit tests are useful to ensure scalability and security in API development.",
-        user_id: user_id
-      }
-      {:ok, task} = Tasks.create_task(task_params)
+    task_params = %{
+      title: "Create geck api unit tests.",
+      description: "Unit tests are useful to ensure scalability and security in API development.",
+      user_id: user_id
+    }
+    {:ok, task} = Tasks.create_task(task_params)
 
     {:ok, task: task}
   end
