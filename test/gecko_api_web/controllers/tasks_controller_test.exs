@@ -13,12 +13,20 @@ defmodule GeckoApiWeb.TasksControllerTest do
     }
 
     {:ok, user} = Users.create_user(user_default_params)
+    user_id = user.id
 
     {:ok, token, _claims} = Guardian.encode_and_sign(user)
 
+    task_params = %{
+      title: "Create geck api unit tests.",
+      description: "Unit tests are useful to ensure scalability and security in API development.",
+      user_id: user_id
+    }
+    {:ok, task} = Tasks.create_task(task_params)
+
     conn = put_req_header(conn, "authorization", "Bearer #{token}")
 
-    {:ok, conn: conn, user: user}
+    {:ok, conn: conn, user: user, task: task}
   end
 
   describe "create/2" do
@@ -59,17 +67,7 @@ defmodule GeckoApiWeb.TasksControllerTest do
   end
 
   describe "get/2" do
-    test "Returns the task data if the id is valid and belongs to a task.", %{conn: conn, user: user} do
-      user_id = user.id
-
-      task_params = %{
-        title: "Create tests of of tasks feature.",
-        description: "The tests includes all modules and controllers.",
-        user_id: user_id
-      }
-
-      {:ok, task} = Tasks.create_task(task_params)
-
+    test "Returns the task data if the id is valid and belongs to a task.", %{conn: conn, task: task} do
       response =
         conn
         |> get("/api/tasks/?id=#{task.id}")
@@ -77,9 +75,8 @@ defmodule GeckoApiWeb.TasksControllerTest do
 
       assert %{
         "completed" => false,
-        "description" => "The tests includes all modules and controllers.",
-        "title" => "Create tests of of tasks feature.",
-        "user_id" => ^user_id
+        "description" => "Unit tests are useful to ensure scalability and security in API development.",
+        "title" => "Create geck api unit tests.",
       } = response
     end
 
@@ -103,17 +100,7 @@ defmodule GeckoApiWeb.TasksControllerTest do
   end
 
   describe "delete/2" do
-    test "Returns the task data and message if the id is valid and belongs to a task.", %{conn: conn, user: user} do
-      user_id = user.id
-
-      task_params = %{
-        title: "Create tests of of tasks feature.",
-        description: "The tests includes all modules and controllers.",
-        user_id: user_id
-      }
-
-      {:ok, task} = Tasks.create_task(task_params)
-
+    test "Returns the task data and message if the id is valid and belongs to a task.", %{conn: conn, task: task} do
       response =
         conn
         |> delete("/api/tasks/?id=#{task.id}")
@@ -123,10 +110,9 @@ defmodule GeckoApiWeb.TasksControllerTest do
           "message" => "Task deleted!",
           "task" => %{
           "completed" => false,
-          "description" => "The tests includes all modules and controllers.",
-          "title" => "Create tests of of tasks feature.",
-          "user_id" => ^user_id
-        }
+          "description" => "Unit tests are useful to ensure scalability and security in API development.",
+          "title" => "Create geck api unit tests."
+          }
         } = response
     end
 
