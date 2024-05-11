@@ -99,6 +99,67 @@ defmodule GeckoApiWeb.TasksControllerTest do
     end
   end
 
+  describe "update/2" do
+    test "Returns a message and the updated task if all parameters to be updated are valid.", %{conn: conn, task: task} do
+      update_params = %{
+        "title" => "Updated title"
+      }
+
+      response =
+        conn
+        |> put("/api/tasks/?id=#{task.id}", update_params)
+        |> json_response(:ok)
+
+      assert %{
+        "message" => "Task updated!",
+        "task" => %{
+          "completed" => false,
+          "description" => "Unit tests are useful to ensure scalability and security in API development.",
+          "title" => "Updated title"
+        }
+      } = response
+    end
+
+    test "Returns an error message and a status code if the task id is invalid.", %{conn: conn} do
+      update_params = %{
+        "title" => "Updated title",
+      }
+
+      response =
+        conn
+        |> put("/api/tasks/?id=invalid_id", update_params)
+        |> json_response(:bad_request)
+
+      assert %{"message" => "Invalid task ID!", "status" => 400} == response
+    end
+
+    test "Returns an error message and a status code if the id does not belong to any task", %{conn: conn} do
+      update_params = %{
+        "title" => "Updated title",
+      }
+
+      response =
+        conn
+        |> put("/api/tasks/?id=#{Ecto.UUID.generate()}", update_params)
+        |> json_response(:not_found)
+
+      assert %{"message" => "Task does not exists!", "status" => 404} == response
+    end
+
+    test "Returns error messages if one or more update parameters are invalid.", %{conn: conn, task: task} do
+      update_params = %{
+        "title" => "a" # Too smal title.
+      }
+
+      response =
+        conn
+        |> put("/api/tasks/?id=#{task.id}", update_params)
+        |> json_response(:bad_request)
+
+      assert %{"errors" => %{"title" => ["should be at least 2 character(s)"]}} == response
+    end
+  end
+
   describe "delete/2" do
     test "Returns the task data and message if the id is valid and belongs to a task.", %{conn: conn, task: task} do
       response =
