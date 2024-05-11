@@ -10,7 +10,7 @@ defmodule GeckoApiWeb.TasksJSON do
   end
 
   def show(%{task: task}), do: data(task)
-
+  def update(%{task: task}), do: %{message: "Task updated!", task: data(task)}
   def delete(%{task: task}), do: %{message: "Task deleted!", task: data(task)}
 
   defp data(%Task{} = task) do
