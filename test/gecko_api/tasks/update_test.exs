@@ -14,23 +14,21 @@ defmodule GeckoApi.Tasks.UpdateTest do
 
     {:ok, user} = Users.create_user(user_params)
 
-    {:ok, user: user}
-  end
-
-  describe "call/1" do
-    test "Returns a tuple with :ok and the updated task if all parameters are valid.", %{user: user} do
-      user_id = user.id
+    user_id = user.id
       task_params = %{
         title: "Create geck api unit tests.",
         description: "Unit tests are useful to ensure scalability and security in API development.",
         user_id: user_id
       }
-      {:ok, created_task} = Tasks.create_task(task_params)
+      {:ok, task} = Tasks.create_task(task_params)
 
-      created_task_id = created_task.id
+    {:ok, task: task}
+  end
 
+  describe "call/1" do
+    test "Returns a tuple with :ok and the updated task if all parameters are valid.", %{task: task} do
       update_params = %{
-        "id" => created_task_id,
+        "id" => task.id,
         "title" => "Updated title"
       }
 
@@ -64,19 +62,9 @@ defmodule GeckoApi.Tasks.UpdateTest do
       assert %{message: "Task does not exists!", status_code: :not_found} == error_data
     end
 
-    test "Returns a tuple and an invalid changeset if one or more parameters to be updated are invalid.", %{user: user} do
-      user_id = user.id
-      task_params = %{
-        title: "Create geck api unit tests.",
-        description: "Unit tests are useful to ensure scalability and security in API development.",
-        user_id: user_id
-      }
-      {:ok, created_task} = Tasks.create_task(task_params)
-
-      created_task_id = created_task.id
-
+    test "Returns a tuple and an invalid changeset if one or more parameters to be updated are invalid.", %{task: task} do
       update_params = %{
-        "id" => created_task_id,
+        "id" => task.id,
         "title" => "a" ## Too smal title.
       }
 
