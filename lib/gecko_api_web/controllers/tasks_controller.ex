@@ -33,6 +33,14 @@ defmodule GeckoApiWeb.TasksController do
     end
   end
 
+  def update(conn, params) do
+    with {:ok, task} <- Tasks.update_task(params) do
+      conn
+      |> put_status(:ok)
+      |> render(:update, task: task)
+    end
+  end
+
   def delete(conn, %{"id" => id}) do
     with {:ok, task} <- Tasks.delete_task(id) do
       conn

@@ -24,7 +24,8 @@ defmodule GeckoApiWeb.Router do
 
     post "/tasks", TasksController, :create
     get "/tasks", TasksController, :show
-    delete "/tasks/", TasksController, :delete
+    put "/tasks", TasksController, :update
+    delete "/tasks", TasksController, :delete
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
