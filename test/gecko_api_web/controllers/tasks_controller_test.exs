@@ -99,6 +99,24 @@ defmodule GeckoApiWeb.TasksControllerTest do
     end
   end
 
+  describe "get_all/1" do
+    test "Returns a list of user tasks.", %{conn: conn, user: user} do
+      task_params = %{
+        title: "Create geck api unit tests.",
+        description: "Unit tests are useful to ensure scalability and security in API development.",
+        user_id: user.id
+      }
+      {:ok, _task} = Tasks.create_task(task_params)
+
+      response =
+        conn
+        |> get("/api/tasks/all")
+        |> json_response(:ok)
+
+      assert length(response) > 0
+    end
+  end
+
   describe "update/2" do
     test "Returns a message and the updated task if all parameters to be updated are valid.", %{conn: conn, task: task} do
       update_params = %{
