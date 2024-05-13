@@ -24,6 +24,7 @@ defmodule GeckoApiWeb.Router do
 
     post "/tasks", TasksController, :create
     get "/tasks", TasksController, :show
+    get "/tasks/all", TasksController, :show_all
     put "/tasks", TasksController, :update
     delete "/tasks", TasksController, :delete
   end
