@@ -39,6 +39,12 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# CORS configuration.
+config :cors_plug,
+  origin: ["*"],
+  max_age: 86400,
+  methods: ["GET", "POST", "PUT", "DELETE"]
+
 # Guardian configuration.
 config :gecko_api, GeckoApiWeb.Auth.Guardian,
   issuer: "gecko_api",
