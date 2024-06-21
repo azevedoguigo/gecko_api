@@ -30,7 +30,7 @@ defmodule GeckoApi.Tasks.Task do
 
   def changeset(task, params) do
     task
-    |> cast(params, [:title, :description])
+    |> cast(params, [:title, :description, :completed])
     |> validate_length(:title, min: 2, max: 40)
     |> validate_length(:description, max: 500)
   end
