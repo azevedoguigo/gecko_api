@@ -23,15 +23,15 @@ defmodule GeckoApi.Tasks.Task do
     %__MODULE__{}
     |> cast(params, [:title, :description, :user_id])
     |> validate_required([:title, :user_id])
-    |> validate_length(:title, min: 2, max: 40)
-    |> validate_length(:description, max: 500)
+    |> validate_length(:title, min: 2, max: 65)
+    |> validate_length(:description, max: 850)
     |> cast_assoc(:user)
   end
 
   def changeset(task, params) do
     task
     |> cast(params, [:title, :description, :completed])
-    |> validate_length(:title, min: 2, max: 40)
-    |> validate_length(:description, max: 500)
+    |> validate_length(:title, min: 2, max: 65)
+    |> validate_length(:description, max: 850)
   end
 end
