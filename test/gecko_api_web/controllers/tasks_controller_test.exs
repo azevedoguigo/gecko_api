@@ -113,7 +113,7 @@ defmodule GeckoApiWeb.TasksControllerTest do
         |> get("/api/tasks/all")
         |> json_response(:ok)
 
-      assert length(response) > 0
+      assert length(response["tasks"]) > 0
     end
   end
 

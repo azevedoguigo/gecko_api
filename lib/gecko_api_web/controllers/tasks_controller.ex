@@ -33,12 +33,14 @@ defmodule GeckoApiWeb.TasksController do
     end
   end
 
-  def show_all(conn, _options) do
+  def show_all(conn, params) do
     %User{id: user_id} = Guardian.Plug.current_resource(conn)
+
+    page = Tasks.get_tasks(user_id, params)
 
     conn
     |> put_status(:ok)
-    |> render(:show_all, tasks: Tasks.get_tasks(user_id))
+    |> render(:show_all, tasks: page.entries, page: page)
   end
 
   def update(conn, params) do

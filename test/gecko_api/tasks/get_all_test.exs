@@ -19,7 +19,9 @@ defmodule GeckoApi.Tasks.GetAllTest do
       }
       {:ok, _result} = Tasks.create_task(task_params)
 
-      task_list = Tasks.GetAll.call(user.id)
+      page = Tasks.GetAll.call(user.id)
+
+      task_list = page.entries
 
       assert length(task_list) > 0
     end
