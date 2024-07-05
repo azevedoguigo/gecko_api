@@ -11,7 +11,17 @@ defmodule GeckoApiWeb.TasksJSON do
 
   def show(%{task: task}), do: data(task)
 
-  def show_all(%{tasks: tasks}), do: Enum.map(tasks, fn task -> data(task) end)
+  def show_all(%{tasks: tasks, page: page}) do
+    %{
+      tasks: Enum.map(tasks, fn task -> data(task) end),
+      pagination: %{
+        total_pages: page.total_pages,
+        total_entries: page.total_entries,
+        page_number: page.page_number,
+        page_size: page.page_size,
+      }
+    }
+  end
 
   def update(%{task: task}), do: %{message: "Task updated!", task: data(task)}
 
