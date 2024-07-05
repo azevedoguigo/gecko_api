@@ -6,8 +6,8 @@ defmodule GeckoApi.Tasks.GetAll do
   alias GeckoApi.Tasks.Task
   import Ecto.Query
 
-  def call(user_id) do
+  def call(user_id, params \\ %{}) do
     from(t in Task, where: t.user_id == ^user_id)
-    |> Repo.all()
+    |> Repo.paginate(params)
   end
 end
