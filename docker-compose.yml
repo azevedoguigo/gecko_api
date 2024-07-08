@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - '4000:4000'
+    environment:
+      MIX_ENV: dev
+      DB_HOST: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: gecko_api_dev
+    volumes:
+      - .:/api
+      - deps:/api/deps
+      - _build:/api/_build
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: gecko_api_dev
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  deps:
+  _build:
+  postgres_data:
